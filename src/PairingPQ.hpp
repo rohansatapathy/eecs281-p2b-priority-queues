@@ -176,9 +176,14 @@ class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     //       until it is eliminated by the user calling pop(). Remember this
     //       when you implement updateElt() and updatePriorities().
     Node* addNode(const TYPE& val) {
-        // TODO: Implement this function
-        (void)val;       // Delete this line when you implement this function
-        return nullptr;  // TODO: Delete or change this line
+        Node* newNode = new Node(val);
+        count++;
+        if (root == nullptr) {
+            root = newNode;
+        } else {
+            root = meld(root, newNode);
+        }
+        return newNode;
     }  // addNode()
 
   private:
