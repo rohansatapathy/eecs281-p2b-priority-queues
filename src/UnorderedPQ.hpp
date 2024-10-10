@@ -9,7 +9,7 @@
 // an underlying unordered array-based container that is linearly searched
 // for the most extreme element every time it is needed.
 
-// TODO: Read and understand this priority queue implementation!
+// Read and understand this priority queue implementation!
 // Pay particular attention to how the constructors and findExtreme()
 // are written, especially the use of this->compare.
 

@@ -21,9 +21,8 @@ class SortedPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
   public:
     // Description: Construct an empty PQ with an optional comparison functor.
     // Runtime: O(1)
-    explicit SortedPQ(COMP_FUNCTOR comp = COMP_FUNCTOR()) : BaseClass{comp} {
-        // TODO: Implement this function, or verify that it is already done
-    }  // SortedPQ
+    explicit SortedPQ(COMP_FUNCTOR comp = COMP_FUNCTOR())
+        : BaseClass{comp} {}  // SortedPQ
 
     // Description: Construct a PQ out of an iterator range with an optional
     //              comparison functor.
@@ -31,10 +30,8 @@ class SortedPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     template <typename InputIterator>
     SortedPQ(InputIterator start, InputIterator end,
              COMP_FUNCTOR comp = COMP_FUNCTOR())
-        : BaseClass{comp} {
-        // TODO: Implement this function
-        (void)start;  // Delete this line when you implement this function
-        (void)end;    // Delete this line when you implement this function
+        : BaseClass{comp}, data(start, end) {
+        std::sort(data.begin(), data.end(), comp);
     }  // SortedPQ
 
     // Description: Destructor doesn't need any code, the data vector will
