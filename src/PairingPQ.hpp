@@ -3,6 +3,7 @@
 #ifndef PAIRINGPQ_H
 #define PAIRINGPQ_H
 
+#include <algorithm>
 #include <deque>
 #include <utility>
 
@@ -44,16 +45,14 @@ class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
         TYPE elt;
         Node* child = nullptr;
         Node* sibling = nullptr;
-        // TODO: Add and initialize one extra pointer (parent or previous) as
-        // desired.
+        Node* previous = nullptr;
     };  // Node
 
     // Description: Construct an empty pairing heap with an optional
     //              comparison functor.
     // Runtime: O(1)
-    explicit PairingPQ(COMP_FUNCTOR comp = COMP_FUNCTOR()) : BaseClass{comp} {
-        // TODO: Implement this function.
-    }  // PairingPQ()
+    explicit PairingPQ(COMP_FUNCTOR comp = COMP_FUNCTOR())
+        : BaseClass{comp}, root(nullptr), count(0) {}
 
     // Description: Construct a pairing heap out of an iterator range with an
     //              optional comparison functor.
@@ -61,7 +60,7 @@ class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     template <typename InputIterator>
     PairingPQ(InputIterator start, InputIterator end,
               COMP_FUNCTOR comp = COMP_FUNCTOR())
-        : BaseClass{comp} {
+        : BaseClass{comp}, root(nullptr), count(0) {
         // TODO: Implement this function.
         (void)start;  // Delete this line when you implement this function
         (void)end;    // Delete this line when you implement this function
@@ -69,7 +68,8 @@ class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
 
     // Description: Copy constructor.
     // Runtime: O(n)
-    PairingPQ(const PairingPQ& other) : BaseClass{other.compare} {
+    PairingPQ(const PairingPQ& other)
+        : BaseClass{other.compare}, root(nullptr), count(0) {
         // TODO: Implement this function.
         // NOTE: The structure does not have to be identical to the original,
         //       but it must still be a valid pairing heap.
@@ -182,15 +182,38 @@ class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     }  // addNode()
 
   private:
-    // TODO: Add any additional member variables or member functions you
-    // require here.
-    // TODO: We recommend creating a 'meld' function (see the Pairing Heap
-    // papers).
+    Node* root;
+    size_t count;
 
-    // NOTE: For member variables, you are only allowed to add a "root
-    //       pointer" and a "count" of the number of nodes. Anything else
-    //       (such as a deque) should be declared inside of member functions
-    //       as needed.
+    /*
+     * Description: Combines the two pairing heaps with roots a and b into
+     *              a single pairing heap.
+     *
+     * PRECONDITION: Both *a and *b must be the root node of their pairing heap,
+     *              which means their previous and sibling pointers must be
+     *              nullptr. We also need a, b != nullptr.
+     */
+    Node* meld(Node* a, Node* b) {
+        Node* newRoot;
+        Node* newChild;
+        if (this->compare(a->elt, b->elt)) {
+            newChild = a;
+            newRoot = b;
+        } else {
+            newRoot = a;
+            newChild = b;
+        }
+
+        if (newRoot->child != nullptr) {
+            newRoot->child->previous = newChild;
+            newChild->sibling = newRoot->child;
+        }
+
+        newRoot->child = newChild;
+        newChild->previous = newRoot;
+
+        return newRoot;
+    }
 };
 
 #endif  // PAIRINGPQ_H
