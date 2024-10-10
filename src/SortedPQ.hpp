@@ -75,11 +75,10 @@ class SortedPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     //              might make it no longer be the most extreme element.
     // Runtime: O(1)
     virtual const TYPE& top() const {
-        // TODO: Implement this function
-
-        // These lines are present only so that this provided file compiles.
-        static TYPE temp;  // TODO: Delete this line
-        return temp;       // TODO: Delete or change this line
+        if (data.empty()) {
+            throw std::out_of_range("SortedPQ is empty.");
+        }
+        return data.back();
     }  // top()
 
     // Description: Get the number of elements in the PQ.
