@@ -242,13 +242,34 @@ class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     //              new_value.  Must maintain pairing heap invariants.
     //
     // PRECONDITION: The new priority, given by 'new_value' must be more
-    //              extreme (as defined by comp) than the old priority.
+    //              extreme (as defined by comp) than the old priority. Also,
+    //              we need node != nullptr.
     //
     // Runtime: As discussed in reading material.
     void updateElt(Node* node, const TYPE& new_value) {
-        // TODO: Implement this function
-        (void)node;       // Delete this line when you implement this function
-        (void)new_value;  // Delete this line when you implement this func
+        if (!(this->compare(node->elt, new_value))) {
+            throw std::invalid_argument(
+                "new_value must be greater priority than node's element");
+        }
+        node->elt = new_value;
+
+        if (node->previous == nullptr && node->sibling == nullptr) return;
+
+        bool isLeftmost = node->previous->child == node;
+        if (isLeftmost) {
+            node->previous->child = node->sibling;
+            if (node->sibling != nullptr)
+                node->sibling->previous = node->previous;
+        } else {
+            node->previous->sibling = node->sibling;
+            node->sibling->previous = node->previous;
+        }
+
+        node->sibling = nullptr;
+        node->previous = nullptr;
+
+        root = meld(root, node);
+
     }  // updateElt()
 
     // Description: Add a new element to the pairing heap. Returns a Node*
