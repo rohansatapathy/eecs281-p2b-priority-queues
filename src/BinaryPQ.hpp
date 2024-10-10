@@ -4,6 +4,8 @@
 #define BINARYPQ_H
 
 #include <algorithm>
+#include <iostream>
+#include <ostream>
 #include <stdexcept>
 #include <utility>
 
@@ -130,7 +132,7 @@ class BinaryPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
         while (current * 2 <= size()) {
             size_t swapIndex;
             if (current * 2 + 1 <= size() &&
-                this->compare(at(current * 2 + 1), at(current * 2))) {
+                this->compare(at(current * 2), at(current * 2 + 1))) {
                 swapIndex = current * 2 + 1;
             } else {
                 swapIndex = current * 2;
