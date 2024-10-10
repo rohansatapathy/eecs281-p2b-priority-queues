@@ -106,9 +106,7 @@ void testHiddenData() {
 
     struct HiddenDataComp {
         bool operator()(const HiddenData& a, const HiddenData& b) const {
-            // TODO: Finish this comparator
-            (void)a;  // Delete this line when you finish this function
-            (void)b;  // Delete this line when you finish this function
+            return a.data < b.data;
             return false;
         }
     };
@@ -247,6 +245,9 @@ int main() {
     switch (pqType) {
         case PQType::Unordered:
             testPriorityQueue<UnorderedPQ>();
+            break;
+        case PQType::Sorted:
+            testPriorityQueue<SortedPQ>();
             break;
         default:
             std::cout << "Unrecognized PQ type " << pqType << " in main.\n"

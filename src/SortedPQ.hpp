@@ -52,8 +52,9 @@ class SortedPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     // Description: Add a new element to the PQ.
     // Runtime: O(n)
     virtual void push(const TYPE& val) {
-        data.insert(std::lower_bound(data.begin(), data.end(), this->compare),
-                    val);
+        data.insert(
+            std::lower_bound(data.begin(), data.end(), val, this->compare),
+            val);
     }  // push()
 
     // Description: Remove the most extreme (defined by 'compare') element from
@@ -105,9 +106,6 @@ class SortedPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
   private:
     // Note: This vector *must* be used for your PQ implementation.
     std::vector<TYPE> data;
-
-    // TODO: Add any additional member functions you require here.
-    //       You are NOT allowed to add any new member variables.
 
 };  // SortedPQ
 

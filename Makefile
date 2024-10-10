@@ -86,6 +86,7 @@ CXXFLAGS = -std=c++17 -Wconversion -Wall -Werror -Wextra -pedantic
 #              flags also defines DEBUG and _GLIBCXX_DEBUG
 debug: CXXFLAGS += -g3 -DDEBUG -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG
 debug:
+	mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) $(SOURCES) -o $(BIN_DIR)/$(EXECUTABLE)_debug
 .PHONY: debug
 
@@ -99,12 +100,14 @@ release: $(EXECUTABLE)
 #                 CAEN or WSL (DOES NOT WORK ON MACOS).
 valgrind: CXXFLAGS += -g3
 valgrind:
+	mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) $(SOURCES) -o $(BIN_DIR)/$(EXECUTABLE)_valgrind
 .PHONY: valgrind
 
 # make profile - will compile "all" with $(CXXFLAGS) and the -g3 flag
 profile: CXXFLAGS += -g3
 profile:
+	mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) $(SOURCES) -o $(BIN_DIR)/$(EXECUTABLE)_profile
 .PHONY: profile
 
@@ -144,7 +147,7 @@ all: profile valgrind
 
 $(EXECUTABLE): $(OBJECTS)
 ifneq ($(EXECUTABLE), executable)
-	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXECUTABLE)
+	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(BIN_DIR)/$(EXECUTABLE)
 else
 	@echo Edit EXECUTABLE variable in Makefile.
 	@echo Using default a.out.
