@@ -93,10 +93,11 @@ class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     // Description: Copy assignment operator.
     // Runtime: O(n)
     PairingPQ& operator=(const PairingPQ& rhs) {
-        // TODO: Implement this function.
-        // HINT: Use the copy-swap method from the "Arrays and Containers"
-        // lecture.
-        (void)rhs;  // Delete this line when you implement this function
+        PairingPQ temp(rhs);
+
+        std::swap(root, temp.root);
+        std::swap(count, temp.count);
+
         return *this;
     }  // operator=()
 
