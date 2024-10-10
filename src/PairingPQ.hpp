@@ -143,15 +143,13 @@ class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     // Description: Get the number of elements in the pairing heap.
     // Runtime: O(1)
     [[nodiscard]] virtual std::size_t size() const {
-        // TODO: Implement this function
-        return 0;  // TODO: Delete or change this line
+        return count;
     }  // size()
 
     // Description: Return true if the pairing heap is empty.
     // Runtime: O(1)
     [[nodiscard]] virtual bool empty() const {
-        // TODO: Implement this function
-        return true;  // TODO: Delete or change this line
+        return size() == 0;
     }  // empty()
 
     // Description: Updates the priority of an element already in the pairing
