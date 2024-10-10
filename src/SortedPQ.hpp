@@ -62,7 +62,9 @@ class SortedPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     // familiar with them, you do not need to use exceptions in this project.
     // Runtime: Amortized O(1)
     virtual void pop() {
-        // TODO: Implement this function
+        if (!data.empty()) {
+            data.pop_back();
+        }
     }  // pop()
 
     // Description: Return the most extreme (defined by 'compare') element of
