@@ -91,26 +91,42 @@ void testPrimitiveOperations() {
     assert(eecsPQ.size() == 0);  // NOLINT: Explicit test for size == 0
     assert(eecsPQ.empty());
 
-    // TODO: Add more testing here!
+    for (int i = 0; i < 50; i++) {
+        eecsPQ.push(i);
+    }
+    assert(!eecsPQ.empty());
+    assert(eecsPQ.size() == 50);
+    assert(eecsPQ.top() == 49);
+
+    for (int i = 0; i < 5; i++) {
+        eecsPQ.pop();
+    }
+    assert(eecsPQ.size() == 45);
+    assert(eecsPQ.top() == 44);
 
     std::cout << "testPrimitiveOperations succeeded!" << std::endl;
+}
+
+struct HiddenData {
+    int data;
+};
+
+struct HiddenDataComp {
+    bool operator()(const HiddenData& a, const HiddenData& b) const {
+        return a.data < b.data;
+        return false;
+    }
+};
+
+std::ostream& operator<<(std::ostream& os, const HiddenData hd) {
+    os << hd.data;
+    return os;
 }
 
 // Test that the priority queue uses its comparator properly. HiddenData
 // can't be compared with operator<, so we use HiddenDataComp{} instead.
 template <template <typename...> typename PQ>
 void testHiddenData() {
-    struct HiddenData {
-        int data;
-    };
-
-    struct HiddenDataComp {
-        bool operator()(const HiddenData& a, const HiddenData& b) const {
-            return a.data < b.data;
-            return false;
-        }
-    };
-
     std::cout << "Testing with hidden data..." << std::endl;
 
     PQ<HiddenData, HiddenDataComp> pq{HiddenDataComp{}};
