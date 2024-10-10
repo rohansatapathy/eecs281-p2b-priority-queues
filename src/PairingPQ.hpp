@@ -124,7 +124,40 @@ class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     // this project.
     // Runtime: Amortized O(log(n))
     virtual void pop() {
-        // TODO: Implement this function.
+        if (empty()) {
+            throw std::out_of_range("PairingPQ is empty.");
+        }
+
+        std::deque<Node*> nodes;
+        for (Node* current = root->child; current != nullptr;
+             current = current->sibling) {
+            nodes.push_back(current);
+        }
+
+        Node* a;
+        Node* b;
+        while (nodes.size() > 1) {
+            a = nodes.front();
+            nodes.pop_front();
+            b = nodes.front();
+            nodes.pop_front();
+
+            a->previous = nullptr;
+            a->sibling = nullptr;
+            b->previous = nullptr;
+            b->sibling = nullptr;
+
+            nodes.push_back(meld(a, b));
+        }
+
+        delete root;
+        if (nodes.size() == 0) {
+            root = nullptr;
+        } else {
+            root = nodes.front();
+        }
+
+        count--;
     }  // pop()
 
     // Description: Return the most extreme (defined by 'compare') element of
