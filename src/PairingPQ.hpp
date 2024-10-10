@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <deque>
+#include <stdexcept>
 #include <utility>
 
 #include "Eecs281PQ.hpp"
@@ -133,11 +134,10 @@ class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     //              extreme element.
     // Runtime: O(1)
     virtual const TYPE& top() const {
-        // TODO: Implement this function
-
-        // These lines are present only so that this provided file compiles.
-        static TYPE temp;  // TODO: Delete this line
-        return temp;       // TODO: Delete or change this line
+        if (empty()) {
+            throw std::out_of_range("PairingPQ is empty.");
+        }
+        return root->elt;
     }  // top()
 
     // Description: Get the number of elements in the pairing heap.
