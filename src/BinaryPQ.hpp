@@ -104,14 +104,14 @@ class BinaryPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     //       function, or check data.size().
 
     TYPE& at(size_t index) {
-        if (!(1 <= index <= size()))
+        if (!(1 <= index && index <= size()))
             throw std::out_of_range(
                 "Binary heap index must be 1 <= index <= size.");
         return data.at(index - 1);
     }
 
     const TYPE& at(size_t index) const {
-        if (!(1 <= index <= size()))
+        if (!(1 <= index && index <= size()))
             throw std::out_of_range(
                 "Binary heap index must be 1 <= index <= size.");
         return data.at(index - 1);
