@@ -99,7 +99,7 @@ class SortedPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     //              'rebuilds' the PQ by fixing the PQ invariant.
     // Runtime: O(n log n)
     virtual void updatePriorities() {
-        // TODO: Implement this function
+        std::sort(data.begin(), data.end(), this->compare);
     }  // updatePriorities()
 
   private:
