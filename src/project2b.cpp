@@ -113,9 +113,22 @@ void testHiddenData() {
 
     std::cout << "Testing with hidden data..." << std::endl;
 
-    // TODO: Add code here to actually test with the HiddenData type.
-    // Consider writing this code in the style of testPrimitiveOperations
-    // above.
+    PQ<HiddenData, HiddenDataComp> pq{HiddenDataComp{}};
+    Eecs281PQ<HiddenData, HiddenDataComp>& eecsPQ = pq;
+
+    eecsPQ.push({3});
+    eecsPQ.push({4});
+    assert(eecsPQ.size() == 2);
+    assert(eecsPQ.top().data == 4);
+
+    eecsPQ.pop();
+    assert(eecsPQ.size() == 1);
+    assert(eecsPQ.top().data == 3);
+    assert(!eecsPQ.empty());
+
+    eecsPQ.pop();
+    assert(eecsPQ.size() == 0);
+    assert(eecsPQ.empty());
 
     std::cout << "testHiddenData succeeded!" << std::endl;
 }
@@ -248,6 +261,12 @@ int main() {
             break;
         case PQType::Sorted:
             testPriorityQueue<SortedPQ>();
+            break;
+        case PQType::Binary:
+            testPriorityQueue<BinaryPQ>();
+            break;
+        case PQType::Pairing:
+            testPriorityQueue<PairingPQ>();
             break;
         default:
             std::cout << "Unrecognized PQ type " << pqType << " in main.\n"

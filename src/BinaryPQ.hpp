@@ -4,6 +4,8 @@
 #define BINARYPQ_H
 
 #include <algorithm>
+#include <stdexcept>
+#include <utility>
 
 #include "Eecs281PQ.hpp"
 
@@ -16,9 +18,8 @@ class BinaryPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
   public:
     // Description: Construct an empty PQ with an optional comparison functor.
     // Runtime: O(1)
-    explicit BinaryPQ(COMP_FUNCTOR comp = COMP_FUNCTOR()) : BaseClass{comp} {
-        // TODO: Implement this function, or verify that it is already done
-    }  // BinaryPQ
+    explicit BinaryPQ(COMP_FUNCTOR comp = COMP_FUNCTOR())
+        : BaseClass{comp}, data() {}  // BinaryPQ
 
     // Description: Construct a PQ out of an iterator range with an optional
     //              comparison functor.
@@ -26,10 +27,8 @@ class BinaryPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     template <typename InputIterator>
     BinaryPQ(InputIterator start, InputIterator end,
              COMP_FUNCTOR comp = COMP_FUNCTOR())
-        : BaseClass{comp} {
-        // TODO: Implement this function
-        (void)start;  // Delete this line when you implement this function
-        (void)end;    // Delete this line when you implement this function
+        : BaseClass{comp}, data(start, end) {
+        updatePriorities();
     }  // BinaryPQ
 
     // Description: Destructor doesn't need any code, the data vector will
@@ -51,14 +50,17 @@ class BinaryPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     //              'rebuilds' the heap by fixing the heap invariant.
     // Runtime: O(n)
     virtual void updatePriorities() {
-        // TODO: Implement this function.
+        for (size_t i = size(); 1 <= i && i <= size(); i--) {
+            fixDown(i);
+        }
+
     }  // updatePriorities()
 
     // Description: Add a new element to the PQ.
     // Runtime: O(log(n))
     virtual void push(const TYPE& val) {
-        // TODO: Implement this function.
-        (void)val;  // Delete this line when you implement this function
+        data.push_back(val);
+        fixUp();
     }  // push()
 
     // Description: Remove the most extreme (defined by 'compare') element
@@ -68,7 +70,9 @@ class BinaryPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     // familiar with them, you do not need to use exceptions in this project.
     // Runtime: O(log(n))
     virtual void pop() {
-        // TODO: Implement this function.
+        std::swap(at(1), at(size()));
+        data.pop_back();
+        fixDown();
     }  // pop()
 
     // Description: Return the most extreme (defined by 'compare') element of
@@ -77,27 +81,19 @@ class BinaryPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     //              that might make it no longer be the most extreme element.
     // Runtime: O(1)
     virtual const TYPE& top() const {
-        // TODO: Implement this function.
-
-        // These lines are present only so that this provided file compiles.
-        static TYPE temp;  // TODO: Delete this line
-        return temp;       // TODO: Delete or change this line
+        return at(1);
     }  // top()
 
     // Description: Get the number of elements in the PQ.
     // Runtime: O(1)
     [[nodiscard]] virtual std::size_t size() const {
-        // TODO: Implement this function. Might be very simple,
-        // depending on your implementation.
-        return 0;  // TODO: Delete or change this line
+        return data.size();
     }  // size()
 
     // Description: Return true if the PQ is empty.
     // Runtime: O(1)
     [[nodiscard]] virtual bool empty() const {
-        // TODO: Implement this function. Might be very simple,
-        // depending on your implementation.
-        return true;  // TODO: Delete or change this line
+        return size() == 0;
     }  // empty()
 
   private:
@@ -107,8 +103,48 @@ class BinaryPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     //       a "heapSize", since you can call your own size() member
     //       function, or check data.size().
 
-    // TODO: Add any additional member functions you require here.
-    //       For instance, you might add fixUp() and fixDown().
+    TYPE& at(size_t index) {
+        if (!(1 <= index <= size()))
+            throw std::out_of_range(
+                "Binary heap index must be 1 <= index <= size.");
+        return data.at(index - 1);
+    }
+
+    const TYPE& at(size_t index) const {
+        if (!(1 <= index <= size()))
+            throw std::out_of_range(
+                "Binary heap index must be 1 <= index <= size.");
+        return data.at(index - 1);
+    }
+
+    void fixUp() {
+        size_t current = size();
+        while (current > 1 && this->compare(at(current / 2), at(current))) {
+            std::swap(at(current / 2), at(current));
+            current /= 2;
+        }
+    }
+
+    void fixDown(size_t start_index = 1) {
+        size_t current = start_index;
+        while (current * 2 <= size()) {
+            size_t swapIndex;
+            if (current * 2 + 1 <= size() &&
+                this->compare(at(current * 2 + 1), at(current * 2))) {
+                swapIndex = current * 2 + 1;
+            } else {
+                swapIndex = current * 2;
+            }
+
+            if (this->compare(at(current), at(swapIndex))) {
+                std::swap(at(current), at(swapIndex));
+                current = swapIndex;
+            } else {
+                break;
+            }
+        }
+    }
+
 };  // BinaryPQ
 
 #endif  // BINARYPQ_H
