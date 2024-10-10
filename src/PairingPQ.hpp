@@ -262,7 +262,9 @@ class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
                 node->sibling->previous = node->previous;
         } else {
             node->previous->sibling = node->sibling;
-            node->sibling->previous = node->previous;
+            if (node->sibling != nullptr) {
+                node->sibling->previous = node->previous;
+            }
         }
 
         node->sibling = nullptr;
