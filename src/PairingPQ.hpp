@@ -102,8 +102,22 @@ class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     // Description: Destructor
     // Runtime: O(n)
     ~PairingPQ() {
-        // TODO: Implement this function.
-        ;  // Delete this line, it prevents linter complaints
+        if (root == nullptr) return;
+        std::deque<Node*> nodes;
+        nodes.push_back(root);
+        while (!nodes.empty()) {
+            Node* current = nodes.front();
+            nodes.pop_front();
+
+            if (current->sibling != nullptr) {
+                nodes.push_back(current->sibling);
+            }
+            if (current->child != nullptr) {
+                nodes.push_back(current->child);
+            }
+
+            delete current;
+        }
     }  // ~PairingPQ()
 
     // Description: Move constructor and assignment operators don't need any
