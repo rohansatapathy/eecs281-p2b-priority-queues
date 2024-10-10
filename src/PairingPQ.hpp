@@ -63,9 +63,9 @@ class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     PairingPQ(InputIterator start, InputIterator end,
               COMP_FUNCTOR comp = COMP_FUNCTOR())
         : BaseClass{comp}, root(nullptr), count(0) {
-        // TODO: Implement this function.
-        (void)start;  // Delete this line when you implement this function
-        (void)end;    // Delete this line when you implement this function
+        for (InputIterator i = start; i != end; i++) {
+            addNode(*i);
+        }
     }  // PairingPQ()
 
     // Description: Copy constructor.
