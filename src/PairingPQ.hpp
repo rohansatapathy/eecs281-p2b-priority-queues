@@ -71,9 +71,22 @@ class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     // Runtime: O(n)
     PairingPQ(const PairingPQ& other)
         : BaseClass{other.compare}, root(nullptr), count(0) {
-        // TODO: Implement this function.
-        // NOTE: The structure does not have to be identical to the original,
-        //       but it must still be a valid pairing heap.
+        if (other.root == nullptr) return;
+        std::deque<Node*> nodes;
+        nodes.push_back(other.root);
+        while (!nodes.empty()) {
+            const Node* current = nodes.front();
+            nodes.pop_front();
+
+            if (current->sibling != nullptr) {
+                nodes.push_back(current->sibling);
+            }
+            if (current->child != nullptr) {
+                nodes.push_back(current->child);
+            }
+
+            push(current->elt);
+        }
     }  // PairingPQ()
 
     // Description: Copy assignment operator.
