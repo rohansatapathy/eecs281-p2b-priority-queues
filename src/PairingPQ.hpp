@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <deque>
+#include <ios>
 #include <stdexcept>
 #include <utility>
 
@@ -131,7 +132,31 @@ class PairingPQ : public Eecs281PQ<TYPE, COMP_FUNCTOR> {
     //              and create new ones!
     // Runtime: O(n)
     virtual void updatePriorities() {
-        // TODO: Implement this function.
+        if (root == nullptr) return;
+        std::deque<Node*> nodes;
+        nodes.push_back(root);
+        root = nullptr;
+        while (!nodes.empty()) {
+            Node* current = nodes.front();
+            nodes.pop_front();
+
+            if (current->sibling != nullptr) {
+                nodes.push_back(current->sibling);
+            }
+            if (current->child != nullptr) {
+                nodes.push_back(current->child);
+            }
+
+            current->child = nullptr;
+            current->sibling = nullptr;
+            current->previous = nullptr;
+
+            if (root == nullptr) {
+                root = current;
+            } else {
+                root = meld(root, current);
+            }
+        }
     }  // updatePriorities()
 
     // Description: Add a new element to the pairing heap. This is already
